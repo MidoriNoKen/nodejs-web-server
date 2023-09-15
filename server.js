@@ -38,12 +38,15 @@ const requestListener = (request, response) => {
             response.statusCode = 200
             
             response.end(JSON.stringify({
-                message: 'Ini adalah homepage',
-            }));
+                output: 'Ini adalah homepage',
+            }))
         } else {
-            response.statusCode = 404
-            response.statusMessage = "Not Found"
-            response.end(`Halaman tidak dapat diakses dengan ${method} request`)
+            response.statusCode = 405
+            response.statusMessage = "Method not Allowed"
+
+            response.end(JSON.stringify({
+                output: `Halaman tidak dapat diakses dengan ${method} request`,
+            }))
         }
     } else if (url === "/about") {
         // curl http://localhost:5000/about
@@ -51,18 +54,26 @@ const requestListener = (request, response) => {
         if (method === "GET") {
             // response ketika GET
             response.statusCode = 200
-            response.end('Halo! Ini adalah halaman about')
+
+            response.end(JSON.stringify({
+                output: 'Halo! Ini adalah halaman about'
+            }))
         }
-        
 
         if (method === "PUT") {
             response.statusCode = 200
-            response.end('Dah diubah nih bang... Mau ngapain lagi?')
+            
+            response.end(json.stringify({
+                output: 'Dah diubah nih bang... Mau ngapain lagi?'
+            }))
         }
     
         if (method === "DELETE") {
             response.statusCode = 200
-            response.end('Yah bang... Dah kehapus loh!')
+
+            response.end(JSON.stringify({
+                output: 'Yah bang... Dah kehapus loh!'
+            }))
         }
 
         if (method === "POST") {
@@ -78,18 +89,24 @@ const requestListener = (request, response) => {
             request.on("end", () => {
                 body = Buffer.concat(body).toString()
                 const { name } = JSON.parse(body)
-                response.end(`Halo, ${name}! Ini adalah halaman about`)
+                response.end(JSON.stringify({
+                    output: `Halo, ${name}! Ini adalah halaman about`
+                }))
             })
         } else {
-            response.end(`Halaman tidak dapat diakses dengan ${method} request`)
-            response.statusCode = 404
-            response.statusMessage = "Not Found"
+            response.statusCode = 405
+            response.statusMessage = "Method not Allowed"
+
+            response.end(JSON.stringify({
+                output: `Halaman tidak dapat diakses dengan ${method} request`,
+            }))
         }
     } else {
         response.statusCode = 404
         response.statusMessage = "Not Found"
+        
         response.end(JSON.stringify({
-            message: `Halaman ${url} tidak dapat ditemukan!`
+            output: `Halaman ${url} tidak dapat ditemukan!`
         }))
     }
 
